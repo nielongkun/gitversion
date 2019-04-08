@@ -1,0 +1,232 @@
+git命令
+
+进入目录：
+cd /c
+查看当前目录
+pwd
+创建目录
+mkdir abc
+
+设置本地仓库
+git init
+
+查看隐藏目录
+ls -ah
+查看当前目录下的目录
+ls
+添加文件到暂存区
+git add readme.txt
+批量添加
+git add -A
+
+提交到仓库并设置修改信息
+git commit -m "modify info"
+如果不小心没写 -m及其后的字符，则会进入vim模式
+退出：shift+：，输入q，回车即可
+
+查看修改了哪些文件
+git status
+
+查看具体修改了哪些内容
+git diff readme.txt
+查看工作区和暂存区的不同
+git diff
+查看暂存区与分支的不同
+git diff --cached
+查看工作区与分支的不同
+git diff HEAD -- fileName
+
+
+查看所有历史版本
+git log（详细）
+git log --pretty=oneline（简易）
+
+（前进）回退上一个版本
+git reset --hard HEAD^ 一个版本
+git reset --hard HEAD^^ 两个版本
+git reset --hard HEAD~100 100个版本
+
+
+当回退版本后又想要最新的版本
+git reset --hard dfgead（版本号，不需要写完整，只写前几位就可以了）
+如果忘记版本号
+git reflog  查看所有历史版本号
+git reset --hard dfgead
+
+
+查看当前文件内容
+cat readme.txt（即工作区的内容）
+
+--撤销工作区的修改
+git checkout -- readme.txt （执行该命令后会与当前暂存区的内容保持一致，不论有没有add）
+
+--撤销暂存区的内容，回复到上一个最新版本
+git reset HEAD readme.txt
+git reset 命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本
+
+--删除工作区的文件
+rm test.txt（此时如果要回复删除的文件，则执行“撤销工作区的修改”）
+--删除分支中的文件
+git rm test.txt
+
+
+--从远程仓库拉项目（进入你要放入项目的目录，目录无需和远程仓库项目名称一致）
+git clone git@github.com:nielongkun/gitTwo.git
+gitTwo 是项目名称
+或：
+https://github.com/nielongkun/gitTwo.git（该方法相对较慢）
+
+
+--将本地仓库与远程仓库相关联（在本地向远程关联）
+git remote add origin git@github.com:nielongkun/gitTwo.git
+origin 是远程库名，可以修改
+
+--创建本地分支与远程分支相关联
+git checkout -b dev origin/dev
+
+--创建远程分支与本地分支相关联
+git push --set-upstream orgin localbranch
+
+--将本地数据同步到远程仓库（-u 参数能将本地的master分支与远程仓库的master分支进行关联）
+git push -u origin master
+
+--指定本地分支与远程分支的链接（在提交远程失败后使用）
+git branch --set-upstream-to=origin/dev dev
+
+
+--将本地数据同步到远程仓库
+git push origin master
+
+--查看分支
+git branch
+
+--拉取最新冲突分支（冲突时使用）
+git pull
+
+--创建分支并切换到分支
+git checkout -b <name>
+或以下两行命令：
+git branch <name> 创建分支
+git checkout <name> 切换分支
+
+--合并分支（将name2合并到name1）
+git checkout <name1>
+git merge <name2>
+
+合并分支（no-ff方式，该方式表示禁用Fast forward，即：指针不是指向最新节点，而是新创建一个节点，指向新的节点，该方式可以保留分支合并的历史）
+git merge --no-ff -m "merge with no-ff" dev
+
+--删除分支（适用于分支未add或add后未commit）
+git branch -d <name>
+--删除分支（适用于分支已经commit后）
+git branch -D <name>
+
+--删除远程分支
+git push origin :dev
+或
+git push origin --delete dev
+
+--查看分支合并图
+git log --graph
+查看分支历史
+git log --graph --pretty=oneline --abbrev-commit
+
+--创建远程分支
+git checkout -b dev
+git push origin dev:dev
+
+--创建远程分支到本地的映射（从远程拉分支到本地，远程分支已存在）
+git checkout -b dev origin/dev
+
+
+
+
+
+注：分支与主干合并冲突后，根据文件合并后的标示进行修改，添加，提交，之后分支的内容还是合并前的内容，
+主干的内容是新修改的内容，再次合并分支时即使内容不同也不会报错，因此要注意每次合并分支后删除分支，需要时再次创建分支；
+
+
+--保存当前的分支的工作目录修改状况，以便下次使用；
+git stash 
+注：该保存必须是经过add后的工作现场，如果不进行add，则修改状况不会被保存
+--查看当前保存的修改
+git stash list
+--获取保存的修改
+git stash pop
+或以下两行命令：
+git stash apply 恢复工作现场
+git stash drop 删除保存的工作现场
+
+
+--查看远程库信息
+git remote （查看远程库名）
+git remote -v （查看远程库详细信息）
+
+
+--创建标签
+git tag v1.0
+
+--在指定位置打标签
+git tag v1.0 f52c633
+
+-- 指定位置打标签并设置注释 -a：指定标签名，-m指定说明文字
+git tag -a v0.1 -m "version 0.1 released" 1094adb
+
+--查看有哪些标签
+git tag
+
+--展示对应标签信息
+git show v0.9
+
+--删除标签
+git tag -d v0.9
+
+--推送标签到远程
+git push origin v0.9
+
+--推送所有未提交的标签到远程
+git push origin --tags
+
+--删除远程标签
+1. git tag -d v0.9
+2. git push origin :refs/tags/v0.9
+
+--提交文件时存在一些无需提交的文件或目录（eg：a.txt / dist）
+新建一个.gitignore文件，将文件名：a.txt、dist添加到该文件下即可忽略这些文件
+注：.gitignore文件是文件全名，“.”前不要在加文件名
+
+--设置别名（将status 设置别名为st） --global 表示全局配置
+git config --global alias.st status
+
+
+--退出rebase
+git rebase --abort
+
+
+--master分支无法push解决办法
+git pull gitee master --allow-unrelated-histories
+:wq
+git push gitee master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
