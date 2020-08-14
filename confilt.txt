@@ -1,7 +1,6 @@
 我是冲突文件！
 
-
 本地文件！
-
+my remote modify！
 
 
